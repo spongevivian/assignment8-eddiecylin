@@ -5,9 +5,9 @@ date: "12/8/2017"
 output: html_document
 ---
 ## definitions of x, y, z values in the dataset
-x – sideways acceleration of the device
-y – forward and backward acceleration of the device
-z – acceleration up and down
+x – sideways acceleration of the device    
+y – forward and backward acceleration of the device    
+z – acceleration up and down    
 
 
 ## import data
@@ -129,6 +129,6 @@ Plots orders: Scott, Eddie, Yanfie, Maria
 
 
 ## references: 
-[1. How to analyze smartphone sensor data with R and the BreakoutDetection package]( https://www.r-bloggers.com/how-to-analyze-smartphone-sensor-data-with-r-and-the-breakoutdetection-package/) 
-[2. The breakout package and E-Divisive with Medians algorithms](https://blog.twitter.com/engineering/en_us/a/2014/breakout-detection-in-the-wild.html)
-[3. The BCPA package](http://wiki.cbr.washington.edu/qerm/index.php/Behavioral_Change_Point_Analysis)
+[1. How to analyze smartphone sensor data with R and the BreakoutDetection package]( https://www.r-bloggers.com/how-to-analyze-smartphone-sensor-data-with-r-and-the-breakoutdetection-package/)     
+[2. The breakout package and E-Divisive with Medians algorithms](https://blog.twitter.com/engineering/en_us/a/2014/breakout-detection-in-the-wild.html)    
+[3. The BCPA package](http://wiki.cbr.washington.edu/qerm/index.php/Behavioral_Change_Point_Analysis)    
