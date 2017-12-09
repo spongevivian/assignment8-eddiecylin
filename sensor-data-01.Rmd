@@ -1,0 +1,134 @@
+---
+title: "HUDK4050assignment8- sensor data 01"
+author: "Eddie LIN"
+date: "12/8/2017"
+output: html_document
+---
+## definitions of x, y, z values in the dataset
+x – sideways acceleration of the device
+y – forward and backward acceleration of the device
+z – acceleration up and down
+
+
+## import data
+```{r}
+y.acc <- data.frame(read.csv("yanfie-acc.csv", header = TRUE))
+y.gyr <- data.frame(read.csv("yanfie-gyr.csv", header = TRUE))
+
+s.acc <- data.frame(read.csv("scott-acc.csv", header = TRUE))
+s.gyr <- data.frame(read.csv("scott-gyr.csv", header = TRUE))
+
+m.acc <- data.frame(read.csv("maria-acc.csv", header = TRUE))
+m.gyr <- data.frame(read.csv("maria-gyr.csv", header = TRUE))
+
+e.acc <- data.frame(read.csv("eddie-acc.csv", header = TRUE))
+e.gyr <- data.frame(read.csv("eddie-gyr.csv", header = TRUE))
+```
+
+## check finish time
+```{r}
+scott.finish.acc <- s.acc[nrow(s.acc), 'time_tick'] # 156.9309
+scott.finish.gyr <- s.gyr[nrow(s.gyr), 'time_tick'] # 156.3907
+# Scott's finish time: 156 sec (2.6 min)
+
+eddie.finish.acc <- e.acc[nrow(e.acc), 'time_tick'] # 198.5436
+eddie.finish.gyr <- e.gyr[nrow(e.gyr), 'time_tick'] # 224.6123
+# Eddie's finish time: 198 sec (3.3 min) # take smaller time value
+
+
+yanfie.finish.acc <- y.acc[nrow(y.acc), 'time_tick'] # 198.1487
+yanfie.finish.gyr <- y.gyr[nrow(y.gyr), 'time_tick'] # 197.9935
+# Maria's finish time: 197 sec (3.28 min) # take smaller time value 
+
+maria.finish.acc <- m.acc[nrow(m.acc), 'time_tick'] # 207.6293
+maria.finish.gyr <- m.gyr[nrow(m.gyr), 'time_tick'] # 207.0333
+# Maria's finish time: 207 sec (3.45 min) 
+
+
+```
+
+## Reseaech question 1: Is there a difference in accerlaton patterns for runners at different performance levels?
+
+```{r}
+# vizualize Scott's accerlation pattern
+library(ggplot2)
+ggplot(s.acc) + geom_line(aes(time_tick,  acc_X_value, color="acc_X_value")) + 
+             geom_line(aes(time_tick, acc_Y_value, color="acc_Y_value")) + 
+             geom_line(aes(time_tick, acc_Z_value, color="acc_Z_value")) + 
+             xlab("time_tick") + ylab("acceleration") + ggtitle("Scott's acceleration pattern") + 
+             theme(plot.title = element_text(hjust = 0.5))
+
+# vizualize Eddie's accerlation pattern
+ggplot(e.acc) + geom_line(aes(time_tick,  acc_X_value, color="acc_X_value")) + 
+             geom_line(aes(time_tick, acc_Y_value, color="acc_Y_value")) + 
+             geom_line(aes(time_tick, acc_Z_value, color="acc_Z_value")) + 
+             xlab("time_tick") + ylab("acceleration") + ggtitle("Eddie's acceleration pattern") + 
+             theme(plot.title = element_text(hjust = 0.5))
+
+# vizualize Yanfie's accerlation pattern
+
+ggplot(y.acc) + geom_line(aes(time_tick,  acc_X_value, color="acc_X_value")) + 
+             geom_line(aes(time_tick, acc_Y_value, color="acc_Y_value")) + 
+             geom_line(aes(time_tick, acc_Z_value, color="acc_Z_value")) + 
+             xlab("time_tick") + ylab("acceleration") + ggtitle("Yanfie's acceleration pattern") + 
+             theme(plot.title = element_text(hjust = 0.5))
+
+# vizualize Maria's accerlation pattern
+ggplot(m.acc) + geom_line(aes(time_tick,  acc_X_value, color="acc_X_value")) + 
+             geom_line(aes(time_tick, acc_Y_value, color="acc_Y_value")) + 
+             geom_line(aes(time_tick, acc_Z_value, color="acc_Z_value")) + 
+             xlab("time_tick") + ylab("acceleration") + ggtitle("Maria's acceleration pattern") + 
+             theme(plot.title = element_text(hjust = 0.5))
+
+#################################################################################
+
+
+# check Scott's breakout point (where acceleration has a sudden change)
+install.packages("devtools")
+devtools::install_github("twitter/BreakoutDetection")
+library(BreakoutDetection)
+
+# Scott's acceleration change point
+s.acc.x <- s.acc$acc_X_value
+
+s.x.bo <- breakout(s.acc.x, plot=TRUE)
+s.x.bo$plot
+# there is a significant chnage in Scott's acceleration (slow down)starting between about 93-96 sec
+# I decided to use just x value for the following analysis, since x value seems to be the most sensitive to running movement
+
+
+# Eddie's acceleration change point
+e.acc.x <- e.acc$acc_X_value
+
+e.x.bo <- breakout(e.acc.x, plot=TRUE)
+e.x.bo$plot
+# there is a significant chnage in Eddie's acceleration (speed up)starting between about 100 sec
+
+# Yanfie's acceleration change point
+y.acc.x <- y.acc$acc_X_value
+
+y.x.bo <- breakout(y.acc.x, plot=TRUE)
+y.x.bo$plot
+# there is a significant chnage in Yanfie's acceleration (speed up)starting between about 16-107 sec
+
+# Maria's acceleration change point
+m.acc.x <- m.acc$acc_X_value
+
+m.x.bo <- breakout(m.acc.x, plot=TRUE)
+m.x.bo$plot
+# there is a significant chnage in Maria's acceleration (speed up)starting between about 190-194 sec
+
+##################################################################################
+
+## ????? does this acceleration change (and time) corresponds to the number of laps ?????
+## ????? for post test, should we go fast/slow at first and then do the opposite later ?????
+## ????? when should we change our acceleration in the sense of lap ?????
+
+```
+Plots orders: Scott, Eddie, Yanfie, Maria
+
+
+## references: 
+[1. How to analyze smartphone sensor data with R and the BreakoutDetection package]( https://www.r-bloggers.com/how-to-analyze-smartphone-sensor-data-with-r-and-the-breakoutdetection-package/) 
+[2. The breakout package and E-Divisive with Medians algorithms](https://blog.twitter.com/engineering/en_us/a/2014/breakout-detection-in-the-wild.html)
+[3. The BCPA package](http://wiki.cbr.washington.edu/qerm/index.php/Behavioral_Change_Point_Analysis)
